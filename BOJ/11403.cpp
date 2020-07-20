@@ -1,32 +1,34 @@
 #include <iostream>
+#include <queue>
 
 using namespace std;
 
-int n, se;
+int n,
+    se;
 int arr[105][105];
 int buf[105][105];
 
-void dfs(int s, int e, int cnt)
+void bfs()
 {
-  if (cnt > n)
-    return;
-  if (s != e)
-    buf[s][e] = 1;
-  else if (cnt != 0)
-  {
-    buf[s][e] = 1;
-  }
-  else
-  {
-    cnt += 1;
-  }
   for (int i = 0; i < n; i++)
   {
-    if (arr[e][i] == 1)
-      dfs(s, i, cnt);
+    queue<int> Q;
+    Q.push(i);
+    while (!Q.empty())
+    {
+      int cur = Q.front();
+      Q.pop();
+      for (int j = 0; j < n; j++)
+      {
+        if (arr[cur][j] == 1 && buf[i][j] == 0)
+        {
+          buf[i][j] = 1;
+          Q.push(j);
+        }
+      }
+    }
   }
-}
-
+};
 int main()
 {
   ios_base::sync_with_stdio(false);
@@ -36,8 +38,9 @@ int main()
   for (int i = 0; i < n; i++)
     for (int j = 0; j < n; j++)
       cin >> arr[i][j];
-  for (int i = 0; i < n; i++)
-    dfs(i, 0, 0);
+
+  bfs();
+
   for (int i = 0; i < n; i++)
   {
     for (int j = 0; j < n; j++)
